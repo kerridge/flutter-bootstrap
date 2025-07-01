@@ -177,6 +177,48 @@ class CheckoutFlowExample {
 /// - Back button: Track backtracking
 /// - dispose(): Track abandonment if not completed
 
+/// Example showing proper step timing
+class ProperTimingExample {
+  /// Example: Proper step timing in a real app
+  void properStepTiming() {
+    final funnel = FunnelTracker(
+      funnelId: 'checkout',
+      funnelName: 'Checkout Flow',
+      userId: 'user_123',
+      sessionId: 'session_456',
+    );
+
+    // 1. User enters shipping step
+    funnel.startStep(2, 'shipping_info');
+
+    // 2. User spends time filling out form...
+    // (in real app, this would be actual user interaction time)
+
+    // 3. User completes shipping step (e.g., clicks "Continue")
+    funnel.completeStep(
+      stepNumber: 2,
+      stepName: 'shipping_info',
+      stepDescription: 'User entered shipping information',
+      stepData: {'shipping_method': 'express', 'country': 'US'},
+    );
+
+    // 4. User enters payment step
+    funnel.startStep(3, 'payment_method');
+
+    // 5. User spends time selecting payment method...
+
+    // 6. User completes payment step
+    funnel.completeStep(
+      stepNumber: 3,
+      stepName: 'payment_method',
+      stepDescription: 'User selected payment method',
+      stepData: {'payment_method': 'credit_card'},
+    );
+
+    // Now timeSpentOnCurrentStep will show actual time spent on each step
+  }
+}
+
 /// Example of different abandonment scenarios
 class AbandonmentScenarios {
   /// User gets an error and leaves

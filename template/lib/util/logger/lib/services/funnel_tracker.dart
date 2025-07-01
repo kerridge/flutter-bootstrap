@@ -44,7 +44,7 @@ class FunnelTracker {
   }) {
     final now = DateTime.now();
     final stepStartTime = _stepStartTimes[stepNumber];
-    final timeSpentOnPreviousStep = stepStartTime != null
+    final timeSpentOnCurrentStep = stepStartTime != null
         ? now.difference(stepStartTime).inSeconds
         : null;
 
@@ -57,7 +57,7 @@ class FunnelTracker {
       previousStep: _completedSteps.isNotEmpty
           ? _completedSteps.last.stepName
           : null,
-      timeSpentOnPreviousStep: timeSpentOnPreviousStep,
+      timeSpentOnCurrentStep: timeSpentOnCurrentStep,
     );
 
     _completedSteps.add(step);

@@ -8,7 +8,7 @@ class FunnelStep {
   final Map<String, dynamic>? stepData;
   final DateTime timestamp;
   final String? previousStep;
-  final int? timeSpentOnPreviousStep; // in seconds
+  final int? timeSpentOnCurrentStep; // in seconds
 
   FunnelStep({
     required this.stepNumber,
@@ -17,7 +17,7 @@ class FunnelStep {
     this.stepData,
     required this.timestamp,
     this.previousStep,
-    this.timeSpentOnPreviousStep,
+    this.timeSpentOnCurrentStep,
   });
 
   Map<String, dynamic> toMap() => {
@@ -27,8 +27,8 @@ class FunnelStep {
     if (stepData != null) 'step_data': stepData,
     'timestamp': timestamp.toIso8601String(),
     if (previousStep != null) 'previous_step': previousStep,
-    if (timeSpentOnPreviousStep != null)
-      'time_spent_on_previous_step': timeSpentOnPreviousStep,
+    if (timeSpentOnCurrentStep != null)
+      'time_spent_on_current_step': timeSpentOnCurrentStep,
   };
 }
 
@@ -54,7 +54,7 @@ class FunnelStepEvent implements AnalyticEvent {
   String get name => 'funnel_step_completed';
 
   @override
-  AnalyticEventType get type => AnalyticEventType.conversion;
+  AnalyticEventType get type => AnalyticEventType.funnel;
 
   @override
   DateTime get timestamp => step.timestamp;
@@ -143,7 +143,7 @@ class FunnelBacktrackEvent implements AnalyticEvent {
   String get name => 'funnel_backtrack';
 
   @override
-  AnalyticEventType get type => AnalyticEventType.conversion;
+  AnalyticEventType get type => AnalyticEventType.funnel;
 
   @override
   DateTime get timestamp => DateTime.now();
@@ -184,7 +184,7 @@ class FunnelAbandonmentEvent implements AnalyticEvent {
   String get name => 'funnel_abandoned';
 
   @override
-  AnalyticEventType get type => AnalyticEventType.conversion;
+  AnalyticEventType get type => AnalyticEventType.funnel;
 
   @override
   DateTime get timestamp => DateTime.now();
