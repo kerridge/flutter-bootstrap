@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:template/util/navigator/lib/routers/router.dart';
 
-abstract interface class BasePage extends HookConsumerWidget {
+abstract class BasePage extends HookConsumerWidget {
   const BasePage({super.key});
 
   /// The title of the page
@@ -98,8 +99,8 @@ abstract interface class BasePage extends HookConsumerWidget {
 
   Scaffold _buildScaffold(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: buildAppBar(context, ref),
-      body: buildContent(context, ref),
+      appBar: buildAppBar(context, ref, ref.router),
+      body: buildContent(context, ref, ref.router),
       floatingActionButton: buildFloatingActionButton(ref),
       backgroundColor: screenBackgroundColor(context, ref),
       extendBodyBehindAppBar: extendBodyBehindAppBar,
@@ -109,11 +110,15 @@ abstract interface class BasePage extends HookConsumerWidget {
 
   /// The main content of the page
   @protected
-  Widget buildContent(BuildContext context, WidgetRef ref);
+  Widget buildContent(BuildContext context, WidgetRef ref, AppRouter router);
 
   /// The app bar of the page
   @protected
-  PreferredSizeWidget? buildAppBar(BuildContext context, WidgetRef ref) => null;
+  PreferredSizeWidget? buildAppBar(
+    BuildContext context,
+    WidgetRef ref,
+    AppRouter router,
+  ) => null;
 
   /// The floating action button of the page
   @protected
