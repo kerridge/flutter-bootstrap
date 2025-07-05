@@ -13,4 +13,14 @@ final class GoRouterStrategy implements AppRouter {
   void pop(BuildContext context) {
     Navigator.pop(context);
   }
+
+  @override
+  void showBottomSheet(BuildContext context, WidgetBuilder builder) {
+    showModalBottomSheet(context: context, builder: builder);
+  }
+
+  @override
+  void displayDialog(BuildContext context, WidgetBuilder builder) {
+    showDialog(context: context, builder: builder);
+  }
 }

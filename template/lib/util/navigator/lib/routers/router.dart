@@ -7,6 +7,9 @@ import '../module/providers.di.dart';
 abstract interface class AppRouter {
   void push(BuildContext context, String path);
   void pop(BuildContext context);
+
+  void showBottomSheet(BuildContext context, WidgetBuilder builder);
+  void displayDialog(BuildContext context, WidgetBuilder builder);
 }
 
 /// Widget that provides router access via dependOnWidgetOfExactType

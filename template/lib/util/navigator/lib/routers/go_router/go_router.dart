@@ -21,7 +21,7 @@ final class AppGoRouter extends Notifier<GoRouter> {
           GoRoute(
             path: '/todos',
             builder: (BuildContext context, GoRouterState state) {
-              return const TodosPage();
+              return TodosPage();
             },
           ),
         ],
