@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:template/features/home/home.api.dart';
-import 'package:template/features/todos/todos.api.dart';
+import 'package:template/modules/home/home.api.dart';
+import 'package:template/modules/todos/todos.api.dart';
+import 'package:template/modules/todos/lib/features/todo_detail/todo_page.dart';
 
 final class AppGoRouter extends Notifier<GoRouter> {
   @override
@@ -19,9 +20,16 @@ final class AppGoRouter extends Notifier<GoRouter> {
         },
         routes: <RouteBase>[
           GoRoute(
-            path: '/todos',
+            path: 'todos',
             builder: (BuildContext context, GoRouterState state) {
-              return TodosPage();
+              return const TodosPage();
+            },
+          ),
+          GoRoute(
+            path: 'todo/:id',
+            builder: (BuildContext context, GoRouterState state) {
+              final id = state.pathParameters['id'] ?? '';
+              return TodoPage();
             },
           ),
         ],

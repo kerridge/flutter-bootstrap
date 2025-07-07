@@ -3,14 +3,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:template/util/navigator/lib/routers/router.dart';
 
-import 'screen_spec_core.dart';
-
-abstract class RScreen<S extends ScreenSpec> extends BasePage {
-  const RScreen(this.screenSpec, {super.key});
-
-  final S screenSpec;
-}
-
 abstract class BasePage extends HookConsumerWidget {
   const BasePage({super.key});
 

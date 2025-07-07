@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../module/providers.di.dart';
+import '../screen_spec/screen_spec.api.dart';
 
 abstract interface class AppRouter {
   void push(BuildContext context, String path);

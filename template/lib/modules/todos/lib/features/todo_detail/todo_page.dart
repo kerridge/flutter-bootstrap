@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:template/ui_library/ui_library.api.dart';
-import 'package:template/util/navigator/navigator.api.dart';
-
+import 'package:template/util/navigator/lib/routers/router.dart';
 import 'package:template/util/x_arc/x_arc.api.dart';
 
-import 'specs/todos.screenspec.dart';
-
-final class TodosPage extends RScreen<TodosScreenSpec> {
-  const TodosPage(super.segment, {super.key});
+final class TodoPage extends BasePage {
+  const TodoPage({super.key});
 
   @override
   String get title => 'Todos';
