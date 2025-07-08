@@ -6,8 +6,8 @@ import 'package:template/util/navigator/navigator.api.dart';
 
 import 'package:template/util/x_arc/x_arc.api.dart';
 
-final class TodosPage extends BasePage {
-  const TodosPage({super.key});
+final class TodosListPage extends BasePage {
+  const TodosListPage({super.key});
 
   @override
   String get title => 'Todos';

@@ -4,11 +4,13 @@ import 'package:template/ui_library/ui_library.api.dart';
 import 'package:template/util/navigator/lib/routers/router.dart';
 import 'package:template/util/x_arc/x_arc.api.dart';
 
-final class TodoPage extends BasePage {
-  const TodoPage({super.key});
+final class TodoDetailPage extends BasePage {
+  const TodoDetailPage({super.key, required this.id});
+
+  final String id;
 
   @override
-  String get title => 'Todos';
+  String get title => 'Todo $id';
 
   @override
   PreferredSizeWidget? buildAppBar(
@@ -20,7 +22,7 @@ final class TodoPage extends BasePage {
   @override
   Widget buildContent(BuildContext context, WidgetRef ref, AppRouter router) {
     return UITextButton(
-      label: 'Pop',
+      label: 'Pop $id',
       onPressed: () {
         ref.router.pop(context);
       },
