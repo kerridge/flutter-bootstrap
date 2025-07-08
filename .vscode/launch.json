@@ -36,6 +36,33 @@
       "flutterMode": "debug",
       "program": "lib/main.dart",
       "args": ["--hot"]
+    },
+    {
+      "name": "Flutter Web (Debug)",
+      "cwd": "template",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "debug",
+      "program": "lib/main.dart",
+      "args": ["--web-port=8080", "--web-hostname=localhost"]
+    },
+    {
+      "name": "Flutter Web (Profile)",
+      "cwd": "template",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile",
+      "program": "lib/main.dart",
+      "args": ["--web-port=8080", "--web-hostname=localhost"]
+    },
+    {
+      "name": "Flutter Web (Release)",
+      "cwd": "template",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release",
+      "program": "lib/main.dart",
+      "args": ["--web-port=8080", "--web-hostname=localhost"]
     }
   ]
 }
