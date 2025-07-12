@@ -97,17 +97,83 @@ class AppShell extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: shell,
-      bottomNavigationBar: BottomNavigationBar(
-        // Here, the items of BottomNavigationBar are hard coded. In a real
-        // world scenario, the items would most likely be generated from the
-        // branches of the shell route, which can be fetched using
-        // `navigationShell.route.branches`.
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Section A'),
-          BottomNavigationBarItem(icon: Icon(Icons.work), label: 'Section B'),
-        ],
-        currentIndex: shell.currentIndex,
-        onTap: (int index) => _onTap(context, index),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 8,
+              offset: const Offset(0, -2),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              children: _tabs.mapIndexed((index, tab) {
+                final isSelected = index == shell.currentIndex;
+                return Expanded(
+                  child: GestureDetector(
+                    onTap: () => _onTap(context, index),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: isSelected
+                            ? Theme.of(
+                                context,
+                              ).colorScheme.primary.withOpacity(0.1)
+                            : Colors.transparent,
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            tab.icon,
+                            color: isSelected
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface.withOpacity(0.6),
+                            size: 24,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            tab.label,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: isSelected
+                                  ? FontWeight.w600
+                                  : FontWeight.w400,
+                              color: isSelected
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface.withOpacity(0.6),
+                            ),
+                          ),
+                          if (isSelected) ...[
+                            const SizedBox(height: 4),
+                            Container(
+                              width: 4,
+                              height: 4,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.primary,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        ),
       ),
     );
   }

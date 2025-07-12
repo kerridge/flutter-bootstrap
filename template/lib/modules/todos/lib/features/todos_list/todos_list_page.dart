@@ -7,6 +7,8 @@ import 'package:template/util/navigator/navigator.api.dart';
 
 import 'package:template/util/x_arc/x_arc.api.dart';
 
+import '../../module/todo.routes.dart';
+
 final class TodosListPage extends BasePage {
   const TodosListPage({super.key});
 
@@ -23,11 +25,12 @@ final class TodosListPage extends BasePage {
   @override
   Widget buildContent(BuildContext context, WidgetRef ref, AppRouter router) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         UITextButton(
-          label: 'Pop',
+          label: 'todo 1',
           onPressed: () {
-            ref.router.pop(context);
+            TodoRoutes.todoDetail('1').push(context);
           },
         ).size(width: 200).center(),
       ],

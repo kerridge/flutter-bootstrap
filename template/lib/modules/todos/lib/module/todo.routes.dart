@@ -25,8 +25,31 @@ class TodosListRoute extends GoRouteData with _$TodosListRoute {
   const TodosListRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return const TodosListPage();
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CustomTransitionPage(
+      key: state.pageKey,
+      child: const TodosListPage(),
+      transitionDuration: const Duration(milliseconds: 250),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        // Use a slide transition with a solid background to prevent seeing underlying content
+        return Container(
+          color: Colors.red,
+          child: SlideTransition(
+            position:
+                Tween<Offset>(
+                  begin: const Offset(1.0, 0.0),
+                  end: Offset.zero,
+                ).animate(
+                  CurvedAnimation(parent: animation, curve: Curves.easeOut),
+                ),
+            child: Container(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: child,
+            ),
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -36,7 +59,18 @@ class TodoDetailRoute extends GoRouteData with _$TodoDetailRoute {
   final String id;
 
   @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return TodoDetailPage(id: id);
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CustomTransitionPage(
+      key: state.pageKey,
+      child: TodoDetailPage(id: id),
+      transitionDuration: const Duration(milliseconds: 300),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        // Use a slide transition with a solid background to prevent seeing underlying content
+        return Container(
+          color: Colors.black26,
+          child: FadeTransition(opacity: animation, child: child),
+        );
+      },
+    );
   }
 }
