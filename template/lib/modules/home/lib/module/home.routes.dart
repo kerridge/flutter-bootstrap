@@ -7,9 +7,11 @@ import '../features/home_page/home_page.dart';
 part 'home.routes.g.dart';
 
 abstract final class HomeRoutes {
-  static List<RouteBase> routes = $appRoutes;
+  // static List<RouteBase> routes = $appRoutes;
 
   static HomeRoute get home => const HomeRoute();
+
+  // static final RouteBase homeroute = $homeRoute;
 }
 
 @TypedGoRoute<HomeRoute>(path: '/', routes: [])

@@ -11,7 +11,7 @@ part 'todo.routes.g.dart';
 abstract final class TodoRoutes {
   static List<RouteBase> routes = $appRoutes;
 
-  static TodosListRoute get todosList => const TodosListRoute();
+  static const TodosListRoute todosList = TodosListRoute();
   static TodoDetailRoute todoDetail(String id) => TodoDetailRoute(id: id);
 }
 

@@ -1,16 +1,209 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:template/modules/home/home.api.dart';
 import 'package:template/modules/todos/todos.api.dart';
 
+part 'go_router.g.dart';
+
 final class AppGoRouter extends Notifier<GoRouter> {
+  static final GlobalKey<NavigatorState> rootNavKey = GlobalKey<NavigatorState>(
+    debugLabel: 'root',
+  );
+
   @override
   GoRouter build() {
     return _router;
   }
 
-  final GoRouter _router = GoRouter(
-    routes: <RouteBase>[...HomeRoutes.routes, ...TodoRoutes.routes],
+  late final GoRouter _router = GoRouter(
+    navigatorKey: rootNavKey,
+    debugLogDiagnostics: true,
+    initialLocation: '/',
+    routes: <RouteBase>[$myShellRouteData],
+  );
+}
+
+abstract final class Tab {
+  const Tab();
+
+  String get name;
+
+  String get path;
+
+  IconData get icon;
+
+  String get label;
+}
+
+final class HomeTab extends Tab {
+  const HomeTab();
+
+  @override
+  String get name => 'Home';
+
+  @override
+  String get path => '/';
+
+  @override
+  IconData get icon => Icons.home;
+
+  @override
+  String get label => 'Home';
+}
+
+final class TodosTab extends Tab {
+  const TodosTab();
+
+  @override
+  String get name => 'Todos';
+
+  @override
+  String get path => '/todos';
+
+  @override
+  IconData get icon => Icons.list;
+
+  @override
+  String get label => 'Todos';
+}
+
+@TypedStatefulShellRoute<MyShellRouteData>(branches: MyShellRouteData.branches)
+class MyShellRouteData extends StatefulShellRouteData {
+  const MyShellRouteData();
+
+  static const List<TypedStatefulShellBranch<StatefulShellBranchData>>
+  branches = [BranchAData.branch, BranchBData.branch];
+
+  @override
+  Widget builder(
+    BuildContext context,
+    GoRouterState state,
+    StatefulNavigationShell navigationShell,
+  ) {
+    return navigationShell;
+  }
+
+  static const String $restorationScopeId = 'restorationScopeId';
+
+  static Widget $navigatorContainerBuilder(
+    BuildContext context,
+    StatefulNavigationShell navigationShell,
+    List<Widget> children,
+  ) {
+    return AppShell(shell: navigationShell, children: children);
+  }
+}
+
+class BranchAData extends StatefulShellBranchData {
+  const BranchAData();
+
+  static List<RouteBase> $routes = <RouteBase>[HomeRoutes.home];
+
+  static const TypedStatefulShellBranch<BranchAData> branch =
+      TypedStatefulShellBranch<BranchAData>(
+        routes: <TypedRoute<RouteData>>[TypedGoRoute<HomeRoute>(path: '/')],
+      );
+}
+
+class BranchBData extends StatefulShellBranchData {
+  const BranchBData();
+
+  static const TypedStatefulShellBranch<BranchBData> branch =
+      TypedStatefulShellBranch<BranchBData>(
+        routes: <TypedRoute<RouteData>>[
+          TypedGoRoute<TodosListRoute>(path: '/todos'),
+        ],
+      );
+
+  static final GlobalKey<NavigatorState> $navigatorKey =
+      GlobalKey<NavigatorState>(debugLabel: 'tabB');
+  static const String $restorationScopeId = 'restorationScopeId';
+}
+
+class AppShell extends StatelessWidget {
+  const AppShell({super.key, required this.shell, required this.children});
+
+  final StatefulNavigationShell shell;
+  final List<Widget> children;
+
+  static const List<Tab> _tabs = [HomeTab(), TodosTab()];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: AnimatedBranchContainer(
+        currentIndex: shell.currentIndex,
+        children: children,
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        // Here, the items of BottomNavigationBar are hard coded. In a real
+        // world scenario, the items would most likely be generated from the
+        // branches of the shell route, which can be fetched using
+        // `navigationShell.route.branches`.
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Section A'),
+          BottomNavigationBarItem(icon: Icon(Icons.work), label: 'Section B'),
+        ],
+        currentIndex: shell.currentIndex,
+        onTap: (int index) => _onTap(context, index),
+      ),
+    );
+  }
+
+  /// Navigate to the current location of the branch at the provided index when
+  /// tapping an item in the BottomNavigationBar.
+  void _onTap(BuildContext context, int index) {
+    // When navigating to a new branch, it's recommended to use the goBranch
+    // method, as doing so makes sure the last navigation state of the
+    // Navigator for the branch is restored.
+    shell.goBranch(
+      index,
+      // A common pattern when using bottom navigation bars is to support
+      // navigating to the initial location when tapping the item that is
+      // already active. This example demonstrates how to support this behavior,
+      // using the initialLocation parameter of goBranch.
+      initialLocation: index == shell.currentIndex,
+    );
+  }
+}
+
+/// Custom branch Navigator container that provides animated transitions
+/// when switching branches.
+class AnimatedBranchContainer extends StatelessWidget {
+  /// Creates a AnimatedBranchContainer
+  const AnimatedBranchContainer({
+    super.key,
+    required this.currentIndex,
+    required this.children,
+  });
+
+  /// The index (in [children]) of the branch Navigator to display.
+  final int currentIndex;
+
+  /// The children (branch Navigators) to display in this container.
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: children.mapIndexed((int index, Widget navigator) {
+        return AnimatedScale(
+          scale: index == currentIndex ? 1 : 1.5,
+          duration: const Duration(milliseconds: 400),
+          child: AnimatedOpacity(
+            opacity: index == currentIndex ? 1 : 0,
+            duration: const Duration(milliseconds: 400),
+            child: _branchNavigatorWrapper(index, navigator),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _branchNavigatorWrapper(int index, Widget navigator) => IgnorePointer(
+    ignoring: index != currentIndex,
+    child: TickerMode(enabled: index == currentIndex, child: navigator),
   );
 }
