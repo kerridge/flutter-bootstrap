@@ -69,12 +69,14 @@ final class TodosTab extends Tab {
   String get label => 'Todos';
 }
 
-@TypedStatefulShellRoute<MyShellRouteData>(branches: MyShellRouteData.branches)
+@TypedStatefulShellRoute<MyShellRouteData>(
+  branches: [
+    TypedStatefulShellBranch<BranchAData>(),
+    TypedStatefulShellBranch<BranchBData>(),
+  ],
+)
 class MyShellRouteData extends StatefulShellRouteData {
   const MyShellRouteData();
-
-  static const List<TypedStatefulShellBranch<StatefulShellBranchData>>
-  branches = [BranchAData.branch, BranchBData.branch];
 
   @override
   Widget builder(
@@ -99,27 +101,18 @@ class MyShellRouteData extends StatefulShellRouteData {
 class BranchAData extends StatefulShellBranchData {
   const BranchAData();
 
-  static List<RouteBase> $routes = <RouteBase>[HomeRoutes.home];
-
-  static const TypedStatefulShellBranch<BranchAData> branch =
-      TypedStatefulShellBranch<BranchAData>(
-        routes: <TypedRoute<RouteData>>[TypedGoRoute<HomeRoute>(path: '/')],
-      );
+  static const String $restorationScopeId = 'restorationScopeId';
+  static final List<RouteBase> $routes = <RouteBase>[HomeRoutes.homeroute];
 }
 
 class BranchBData extends StatefulShellBranchData {
   const BranchBData();
 
-  static const TypedStatefulShellBranch<BranchBData> branch =
-      TypedStatefulShellBranch<BranchBData>(
-        routes: <TypedRoute<RouteData>>[
-          TypedGoRoute<TodosListRoute>(path: '/todos'),
-        ],
-      );
-
   static final GlobalKey<NavigatorState> $navigatorKey =
       GlobalKey<NavigatorState>(debugLabel: 'tabB');
   static const String $restorationScopeId = 'restorationScopeId';
+  static final List<RouteBase> $routes = const <RouteBase>[];
+  static final $preload = false;
 }
 
 class AppShell extends StatelessWidget {

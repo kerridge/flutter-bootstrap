@@ -13,6 +13,8 @@ abstract final class TodoRoutes {
 
   static const TodosListRoute todosList = TodosListRoute();
   static TodoDetailRoute todoDetail(String id) => TodoDetailRoute(id: id);
+
+  static final RouteBase todosRoute = $todosListRoute;
 }
 
 @TypedGoRoute<TodosListRoute>(
