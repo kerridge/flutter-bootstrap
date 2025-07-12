@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 
 import '../features/todos_list/todos_list_page.dart';
 
+import 'package:template/util/transition_factory.dart';
+
 part 'todo.routes.g.dart';
 
 abstract final class TodoRoutes {
@@ -29,24 +31,14 @@ class TodosListRoute extends GoRouteData with _$TodosListRoute {
     return CustomTransitionPage(
       key: state.pageKey,
       child: const TodosListPage(),
-      transitionDuration: const Duration(milliseconds: 250),
+      transitionDuration: const Duration(milliseconds: 300),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        // Use a slide transition with a solid background to prevent seeing underlying content
-        return Container(
-          color: Colors.red,
-          child: SlideTransition(
-            position:
-                Tween<Offset>(
-                  begin: const Offset(1.0, 0.0),
-                  end: Offset.zero,
-                ).animate(
-                  CurvedAnimation(parent: animation, curve: Curves.easeOut),
-                ),
-            child: Container(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              child: child,
-            ),
-          ),
+        return TransitionFactory.transitionsBuilder(
+          AppPageTransitionType.slideFade,
+          context,
+          animation,
+          secondaryAnimation,
+          child,
         );
       },
     );
@@ -63,12 +55,14 @@ class TodoDetailRoute extends GoRouteData with _$TodoDetailRoute {
     return CustomTransitionPage(
       key: state.pageKey,
       child: TodoDetailPage(id: id),
-      transitionDuration: const Duration(milliseconds: 300),
+      transitionDuration: const Duration(milliseconds: 350),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        // Use a slide transition with a solid background to prevent seeing underlying content
-        return Container(
-          color: Colors.black26,
-          child: FadeTransition(opacity: animation, child: child),
+        return TransitionFactory.transitionsBuilder(
+          AppPageTransitionType.slideFade,
+          context,
+          animation,
+          secondaryAnimation,
+          child,
         );
       },
     );

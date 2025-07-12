@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:template/modules/home/home.api.dart';
@@ -88,15 +89,50 @@ StatefulShellRoute _buildStatefulShellRoutes() {
 
 const List<Tab> _tabs = [HomeTab(), TodosTab()];
 
-class AppShell extends StatelessWidget {
+class AppShell extends HookConsumerWidget {
   const AppShell({super.key, required this.shell});
 
   final StatefulNavigationShell shell;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final previousIndex = usePrevious(shell.currentIndex);
+    final isTransitioning = useState(false);
+
+    useEffect(() {
+      if (previousIndex != null && previousIndex != shell.currentIndex) {
+        isTransitioning.value = true;
+        Future.delayed(const Duration(milliseconds: 300), () {
+          isTransitioning.value = false;
+        });
+      }
+      return null;
+    }, [shell.currentIndex]);
+
     return Scaffold(
-      body: shell,
+      body: AnimatedSwitcher(
+        key: ValueKey(shell.currentIndex),
+        duration: const Duration(milliseconds: 3000),
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          return FadeTransition(
+            opacity: animation,
+            child: SlideTransition(
+              position:
+                  Tween<Offset>(
+                    begin: const Offset(0.1, 0.0),
+                    end: Offset.zero,
+                  ).animate(
+                    CurvedAnimation(
+                      parent: animation,
+                      curve: Curves.easeOutCubic,
+                    ),
+                  ),
+              child: child,
+            ),
+          );
+        },
+        child: shell,
+      ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
