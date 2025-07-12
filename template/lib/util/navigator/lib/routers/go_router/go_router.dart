@@ -80,7 +80,7 @@ final class TodosTab extends Tab {
 StatefulShellRoute _buildStatefulShellRoutes() {
   return StatefulShellRoute.indexedStack(
     builder: (context, state, StatefulNavigationShell navigationShell) {
-      return AppShell(shell: navigationShell, children: []);
+      return AppShell(shell: navigationShell);
     },
     branches: _tabs.map((tab) => tab.branch).toList(),
   );
@@ -89,18 +89,14 @@ StatefulShellRoute _buildStatefulShellRoutes() {
 const List<Tab> _tabs = [HomeTab(), TodosTab()];
 
 class AppShell extends StatelessWidget {
-  const AppShell({super.key, required this.shell, required this.children});
+  const AppShell({super.key, required this.shell});
 
   final StatefulNavigationShell shell;
-  final List<Widget> children;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AnimatedBranchContainer(
-        currentIndex: shell.currentIndex,
-        children: children,
-      ),
+      body: shell,
       bottomNavigationBar: BottomNavigationBar(
         // Here, the items of BottomNavigationBar are hard coded. In a real
         // world scenario, the items would most likely be generated from the
