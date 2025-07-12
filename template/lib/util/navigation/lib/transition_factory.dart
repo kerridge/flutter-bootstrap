@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 /// Enum for supported page transition types.
 enum AppPageTransitionType {
@@ -43,6 +44,31 @@ class TransitionFactory {
           ),
         );
     }
+  }
+
+  /// Creates a CustomTransitionPage with the specified transition type
+  static CustomTransitionPage<T> createPage<T>({
+    required AppPageTransitionType type,
+    required Widget child,
+    required String key,
+    Duration? transitionDuration,
+  }) {
+    return CustomTransitionPage<T>(
+      key: ValueKey(key),
+      child: child,
+      transitionDuration:
+          transitionDuration ?? const Duration(milliseconds: 300),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        // Only animate the incoming page, underlying page stays static
+        return TransitionFactory.transitionsBuilder(
+          type,
+          context,
+          animation,
+          secondaryAnimation,
+          child,
+        );
+      },
+    );
   }
 }
 

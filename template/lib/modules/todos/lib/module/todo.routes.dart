@@ -1,3 +1,5 @@
+import 'package:template/util/navigation/navigation.api.dart';
+
 import '../features/todo_detail/todo_detail_page.dart';
 
 import 'package:go_router/go_router.dart';
@@ -5,8 +7,6 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
 import '../features/todos_list/todos_list_page.dart';
-
-import 'package:template/util/transition_factory.dart';
 
 part 'todo.routes.g.dart';
 
@@ -26,21 +26,15 @@ abstract final class TodoRoutes {
 class TodosListRoute extends GoRouteData with _$TodosListRoute {
   const TodosListRoute();
 
+  static const String url = '/todos';
+
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
-    return CustomTransitionPage(
-      key: state.pageKey,
+    return TransitionFactory.createPage(
+      type: AppPageTransitionType.slideFade,
       child: const TodosListPage(),
+      key: state.pageKey.toString(),
       transitionDuration: const Duration(milliseconds: 300),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return TransitionFactory.transitionsBuilder(
-          AppPageTransitionType.slideFade,
-          context,
-          animation,
-          secondaryAnimation,
-          child,
-        );
-      },
     );
   }
 }
@@ -52,19 +46,11 @@ class TodoDetailRoute extends GoRouteData with _$TodoDetailRoute {
 
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
-    return CustomTransitionPage(
-      key: state.pageKey,
+    return TransitionFactory.createPage(
+      type: AppPageTransitionType.slideFade,
       child: TodoDetailPage(id: id),
+      key: state.pageKey.toString(),
       transitionDuration: const Duration(milliseconds: 350),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return TransitionFactory.transitionsBuilder(
-          AppPageTransitionType.slideFade,
-          context,
-          animation,
-          secondaryAnimation,
-          child,
-        );
-      },
     );
   }
 }

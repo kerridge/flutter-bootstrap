@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:template/util/module/menu_route.dart';
-import 'package:template/util/navigator/lib/module/internal.di.dart';
+import 'package:template/util/navigation/lib/module/internal.di.dart';
 
 final class ModuleRegistry {
   ModuleRegistry({required this.ref});

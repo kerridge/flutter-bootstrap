@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:template/util/navigator/lib/routers/router.dart';
 
 abstract class BasePage extends HookConsumerWidget {
   const BasePage({super.key});
@@ -95,8 +94,8 @@ abstract class BasePage extends HookConsumerWidget {
 
   Scaffold _buildScaffold(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: buildAppBar(context, ref, ref.router),
-      body: buildContent(context, ref, ref.router),
+      appBar: buildAppBar(context, ref),
+      body: buildContent(context, ref),
       floatingActionButton: buildFloatingActionButton(ref),
       backgroundColor: screenBackgroundColor(context, ref),
       extendBodyBehindAppBar: extendBodyBehindAppBar,
@@ -106,15 +105,11 @@ abstract class BasePage extends HookConsumerWidget {
 
   /// The main content of the page
   @protected
-  Widget buildContent(BuildContext context, WidgetRef ref, AppRouter router);
+  Widget buildContent(BuildContext context, WidgetRef ref);
 
   /// The app bar of the page
   @protected
-  PreferredSizeWidget? buildAppBar(
-    BuildContext context,
-    WidgetRef ref,
-    AppRouter router,
-  ) => null;
+  PreferredSizeWidget? buildAppBar(BuildContext context, WidgetRef ref) => null;
 
   /// The floating action button of the page
   @protected
@@ -123,7 +118,7 @@ abstract class BasePage extends HookConsumerWidget {
   /// The background color of the page
   @protected
   Color? screenBackgroundColor(BuildContext context, WidgetRef ref) =>
-      Colors.white;
+      Theme.of(context).scaffoldBackgroundColor;
 
   /// Whether to wrap the page with safe area
   @protected
@@ -139,7 +134,8 @@ abstract class BasePage extends HookConsumerWidget {
 
   /// The color of the un-safe area
   @protected
-  Color? unSafeAreaColor(BuildContext context, WidgetRef ref) => Colors.white;
+  Color? unSafeAreaColor(BuildContext context, WidgetRef ref) =>
+      Theme.of(context).scaffoldBackgroundColor;
 
   /// Whether to extend the body behind the app bar
   @protected

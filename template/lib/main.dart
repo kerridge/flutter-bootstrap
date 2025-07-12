@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:template/util/module/module.dart';
+import 'package:template/preinit.dart';
 
-import 'package:template/util/navigator/lib/module/internal.di.dart';
-import 'package:template/util/navigator/lib/routers/router.dart';
+import 'core/navigation/app_router.dart';
 
 Future<void> main() async {
-  final container = ProviderContainer(observers: [], overrides: []);
-
-  final moduleRegistry = container.read(ModuleRegistry.provider);
-
-  moduleRegistry.register(TodoModule());
-
-  await moduleRegistry.initialize();
+  final container = await preinit();
 
   runApp(UncontrolledProviderScope(container: container, child: const MyApp()));
 }
@@ -22,14 +15,17 @@ class MyApp extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final router = ref.watch(goRouterProvider);
+    final router = ref.watch(AppRouter.provider);
 
-    return RouterWidget(
-      child: MaterialApp.router(
-        routerConfig: router,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+    return MaterialApp.router(
+      routerConfig: router,
+      title: 'Flutter Demo',
+      theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: Colors.black,
+        // appBarTheme: const AppBarTheme(backgroundColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
+          brightness: Brightness.dark,
         ),
       ),
     );

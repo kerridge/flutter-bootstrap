@@ -4,7 +4,6 @@ import 'package:template/modules/home/lib/module/home.routes.dart';
 import 'package:template/modules/todos/todos.api.dart';
 import 'package:template/ui_library/ui_library.api.dart';
 import 'package:template/util/x_arc/x_arc.api.dart';
-import 'package:template/util/navigator/lib/routers/router.dart';
 
 class HomePage extends BasePage {
   const HomePage({super.key});
@@ -13,7 +12,7 @@ class HomePage extends BasePage {
   String get title => 'Home';
 
   @override
-  Widget buildContent(BuildContext context, WidgetRef ref, AppRouter router) {
+  Widget buildContent(BuildContext context, WidgetRef ref) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
