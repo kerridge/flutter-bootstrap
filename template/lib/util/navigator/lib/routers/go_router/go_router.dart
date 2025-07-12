@@ -5,8 +5,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:template/modules/home/home.api.dart';
 import 'package:template/modules/todos/todos.api.dart';
 
-part 'go_router.g.dart';
-
 final class AppGoRouter extends Notifier<GoRouter> {
   static final GlobalKey<NavigatorState> rootNavKey = GlobalKey<NavigatorState>(
     debugLabel: 'root',
@@ -21,7 +19,7 @@ final class AppGoRouter extends Notifier<GoRouter> {
     navigatorKey: rootNavKey,
     debugLogDiagnostics: true,
     initialLocation: '/',
-    routes: <RouteBase>[$myShellRouteData],
+    routes: <RouteBase>[_buildStatefulShellRoutes()],
   );
 }
 
@@ -35,6 +33,8 @@ abstract final class Tab {
   IconData get icon;
 
   String get label;
+
+  StatefulShellBranch get branch;
 }
 
 final class HomeTab extends Tab {
@@ -51,6 +51,10 @@ final class HomeTab extends Tab {
 
   @override
   String get label => 'Home';
+
+  @override
+  StatefulShellBranch get branch =>
+      StatefulShellBranch(routes: <RouteBase>[HomeRoutes.homeroute]);
 }
 
 final class TodosTab extends Tab {
@@ -67,61 +71,28 @@ final class TodosTab extends Tab {
 
   @override
   String get label => 'Todos';
-}
-
-@TypedStatefulShellRoute<MyShellRouteData>(
-  branches: [
-    TypedStatefulShellBranch<BranchAData>(),
-    TypedStatefulShellBranch<BranchBData>(),
-  ],
-)
-class MyShellRouteData extends StatefulShellRouteData {
-  const MyShellRouteData();
 
   @override
-  Widget builder(
-    BuildContext context,
-    GoRouterState state,
-    StatefulNavigationShell navigationShell,
-  ) {
-    return navigationShell;
-  }
-
-  static const String $restorationScopeId = 'restorationScopeId';
-
-  static Widget $navigatorContainerBuilder(
-    BuildContext context,
-    StatefulNavigationShell navigationShell,
-    List<Widget> children,
-  ) {
-    return AppShell(shell: navigationShell, children: children);
-  }
+  StatefulShellBranch get branch =>
+      StatefulShellBranch(routes: <RouteBase>[TodoRoutes.todosRoute]);
 }
 
-class BranchAData extends StatefulShellBranchData {
-  const BranchAData();
-
-  static const String $restorationScopeId = 'restorationScopeId';
-  static final List<RouteBase> $routes = <RouteBase>[HomeRoutes.homeroute];
+StatefulShellRoute _buildStatefulShellRoutes() {
+  return StatefulShellRoute.indexedStack(
+    builder: (context, state, StatefulNavigationShell navigationShell) {
+      return AppShell(shell: navigationShell, children: []);
+    },
+    branches: _tabs.map((tab) => tab.branch).toList(),
+  );
 }
 
-class BranchBData extends StatefulShellBranchData {
-  const BranchBData();
-
-  static final GlobalKey<NavigatorState> $navigatorKey =
-      GlobalKey<NavigatorState>(debugLabel: 'tabB');
-  static const String $restorationScopeId = 'restorationScopeId';
-  static final List<RouteBase> $routes = const <RouteBase>[];
-  static final $preload = false;
-}
+const List<Tab> _tabs = [HomeTab(), TodosTab()];
 
 class AppShell extends StatelessWidget {
   const AppShell({super.key, required this.shell, required this.children});
 
   final StatefulNavigationShell shell;
   final List<Widget> children;
-
-  static const List<Tab> _tabs = [HomeTab(), TodosTab()];
 
   @override
   Widget build(BuildContext context) {
