@@ -11,7 +11,7 @@ abstract final class HomeRoutes {
 
   static HomeRoute get home => const HomeRoute();
 
-  static final RouteBase homeroute = $homeRoute;
+  static final RouteBase homeRoute = $homeRoute;
 }
 
 @TypedGoRoute<HomeRoute>(path: '/', routes: [])

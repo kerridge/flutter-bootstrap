@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:template/modules/auth/lib/module/auth.routes.dart';
 
 import 'widgets/app_shell.dart';
 import 'tabs/tabs.dart';
@@ -22,8 +23,8 @@ final class AppRouter extends Notifier<GoRouter> {
     navigatorKey: rootNavKey,
     debugLogDiagnostics: true,
 
-    initialLocation: '/',
-    routes: <RouteBase>[_buildStatefulShell()],
+    initialLocation: '/login',
+    routes: <RouteBase>[...AuthRoutes.routes, _buildStatefulShell()],
   );
 
   StatefulShellRoute _buildStatefulShell() {

@@ -1,9 +1,22 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:template/modules/home/home.api.dart';
 import 'package:template/modules/settings/lib/module/settings.routes.dart';
 import 'package:template/modules/todos/todos.api.dart';
 import 'package:template/util/navigation/navigation.api.dart';
+
+enum AppTab {
+  home,
+  todos,
+  settings;
+
+  TabData get tab => switch (this) {
+    AppTab.home => HomeTab(),
+    AppTab.todos => TodosTab(),
+    AppTab.settings => SettingsTab(),
+  };
+}
 
 abstract final class Tabs {
   static const HomeTab home = HomeTab();
@@ -20,7 +33,7 @@ abstract final class Tabs {
       }
     }
 
-    return tabs;
+    return tabs.sorted((a, b) => a.index.compareTo(b.index));
   }
 }
 
@@ -48,7 +61,7 @@ final class HomeTab extends TabData {
 
   @override
   StatefulShellBranch get branch => StatefulShellBranch(
-    routes: <RouteBase>[HomeRoutes.homeroute],
+    routes: <RouteBase>[HomeRoutes.homeRoute],
     navigatorKey: _navKey,
   );
 }

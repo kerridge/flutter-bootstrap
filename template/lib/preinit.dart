@@ -1,6 +1,7 @@
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:template/modules/settings/lib/module/settings.module.dart';
 import 'package:template/util/module/module.dart';
 
 Future<ProviderContainer> preinit() async {
@@ -14,7 +15,7 @@ Future<ProviderContainer> preinit() async {
 
   final moduleRegistry = container.read(ModuleRegistry.provider);
 
-  moduleRegistry.register(TodoModule());
+  moduleRegistry.register(SettingsModule());
 
   await moduleRegistry.initialize();
 
