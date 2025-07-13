@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:template/modules/auth/lib/module/auth.routes.dart';
 import 'package:template/modules/home/home.api.dart';
 import 'package:template/ui_library/ui_library.api.dart';
 
-class LoginPage extends HookConsumerWidget {
-  const LoginPage({super.key});
+class SignupPage extends HookConsumerWidget {
+  const SignupPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -13,18 +12,11 @@ class LoginPage extends HookConsumerWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('Login'),
-          UITextButton(
-            label: 'Login',
-            onPressed: () {
-              HomeRoutes.home.replace(context);
-            },
-          ),
-          const SizedBox(height: 16),
+          Text('Signup'),
           UITextButton(
             label: 'Signup',
             onPressed: () {
-              AuthRoutes.signup.go(context);
+              HomeRoutes.home.replace(context);
             },
           ),
         ],

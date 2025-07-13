@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:template/modules/auth/lib/module/auth.routes.dart';
+
+import 'package:template/util/module/module.dart';
 
 import 'widgets/app_shell.dart';
 import 'tabs/tabs.dart';
@@ -16,16 +17,21 @@ final class AppRouter extends Notifier<GoRouter> {
 
   @override
   GoRouter build() {
-    return _router;
+    return _buildRouter();
   }
 
-  late final GoRouter _router = GoRouter(
-    navigatorKey: rootNavKey,
-    debugLogDiagnostics: true,
+  GoRouter _buildRouter() {
+    final moduleRegistry = ref.read(ModuleRegistry.provider);
 
-    initialLocation: '/login',
-    routes: <RouteBase>[...AuthRoutes.routes, _buildStatefulShell()],
-  );
+    final routes = [...moduleRegistry.rootRoutes, _buildStatefulShell()];
+
+    return GoRouter(
+      navigatorKey: rootNavKey,
+      debugLogDiagnostics: true,
+      initialLocation: '/login',
+      routes: routes,
+    );
+  }
 
   StatefulShellRoute _buildStatefulShell() {
     final tabs = Tabs.all;

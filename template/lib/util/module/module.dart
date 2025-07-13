@@ -27,6 +27,10 @@ final class ModuleRegistry {
     return [...routes, ...settingsRoutes];
   }
 
+  List<RouteBase> get rootRoutes {
+    return _rootModules.values.expand((m) => m.routes).toList();
+  }
+
   void register(Module module) {
     _modules.putIfAbsent(module.name, () => module);
   }
