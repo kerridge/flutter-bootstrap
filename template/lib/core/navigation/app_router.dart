@@ -51,10 +51,10 @@ final class AppRouter extends Notifier<GoRouter> {
     final tabs = Tabs.all;
 
     return StatefulShellRoute.indexedStack(
+      branches: branches,
       builder: (context, state, StatefulNavigationShell navigationShell) {
         return AppShell(shell: navigationShell, tabs: tabs);
       },
-      branches: branches,
     );
   }
 }

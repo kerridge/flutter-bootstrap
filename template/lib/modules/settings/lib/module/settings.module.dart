@@ -9,6 +9,8 @@ import 'settings.routes.dart';
 
 final class SettingsModule extends Module {
   static const GeneralSettingsItem _generalSettingsItem = GeneralSettingsItem();
+  static const NotificationsSettingsItem _notificationsSettingsItem =
+      NotificationsSettingsItem();
 
   @override
   String get name => 'settings';
@@ -18,11 +20,17 @@ final class SettingsModule extends Module {
 
   @override
   Map<AppTab, List<RouteBase>> get routes => {
-    AppTab.settings: [_generalSettingsItem.route],
+    AppTab.settings: [
+      GeneralSettingsRoute.route,
+      NotificationsSettingsRoute.route,
+    ],
   };
 
   @override
-  List<SettingsMenuRepresentable> get settings => [_generalSettingsItem];
+  List<SettingsMenuRepresentable> get settings => [
+    _generalSettingsItem,
+    _notificationsSettingsItem,
+  ];
 }
 
 final class GeneralSettingsItem implements SettingsMenuRepresentable {
@@ -35,5 +43,18 @@ final class GeneralSettingsItem implements SettingsMenuRepresentable {
   String get title => 'General';
 
   @override
-  RouteBase get route => SettingsRoutes.generalSettingsRoute;
+  String get route => GeneralSettingsRoute().location;
+}
+
+final class NotificationsSettingsItem implements SettingsMenuRepresentable {
+  const NotificationsSettingsItem();
+
+  @override
+  IconData? get icon => Icons.notifications;
+
+  @override
+  String get title => 'Notifications';
+
+  @override
+  String get route => NotificationsSettingsRoute().location;
 }

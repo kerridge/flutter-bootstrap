@@ -6,7 +6,11 @@ part of 'settings.routes.dart';
 // GoRouterGenerator
 // **************************************************************************
 
-List<RouteBase> get $appRoutes => [$settingsRoute, $generalSettingsRoute];
+List<RouteBase> get $appRoutes => [
+  $settingsRoute,
+  $generalSettingsRoute,
+  $notificationsSettingsRoute,
+];
 
 RouteBase get $settingsRoute =>
     GoRouteData.$route(path: '/settings', factory: _$SettingsRoute._fromState);
@@ -43,6 +47,33 @@ mixin _$GeneralSettingsRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/settings/general');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $notificationsSettingsRoute => GoRouteData.$route(
+  path: '/settings/notifications',
+
+  factory: _$NotificationsSettingsRoute._fromState,
+);
+
+mixin _$NotificationsSettingsRoute on GoRouteData {
+  static NotificationsSettingsRoute _fromState(GoRouterState state) =>
+      const NotificationsSettingsRoute();
+
+  @override
+  String get location => GoRouteData.$location('/settings/notifications');
 
   @override
   void go(BuildContext context) => context.go(location);

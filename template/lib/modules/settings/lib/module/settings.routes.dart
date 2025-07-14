@@ -2,6 +2,8 @@ import 'package:go_router/go_router.dart';
 
 import 'package:flutter/material.dart';
 
+import '../view/features/app_settings/app_settings_page.dart';
+
 part 'settings.routes.g.dart';
 
 abstract final class SettingsRoutes {
@@ -28,8 +30,26 @@ class SettingsRoute extends GoRouteData with _$SettingsRoute {
 class GeneralSettingsRoute extends GoRouteData with _$GeneralSettingsRoute {
   const GeneralSettingsRoute();
 
+  static final RouteBase route = $generalSettingsRoute;
+
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const Column(children: [Text('General Settings')]);
+    return const AppSettingsPage();
+  }
+}
+
+@TypedGoRoute<NotificationsSettingsRoute>(
+  path: '/settings/notifications',
+  routes: [],
+)
+class NotificationsSettingsRoute extends GoRouteData
+    with _$NotificationsSettingsRoute {
+  const NotificationsSettingsRoute();
+
+  static final RouteBase route = $notificationsSettingsRoute;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const AppSettingsPage();
   }
 }

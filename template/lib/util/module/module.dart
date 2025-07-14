@@ -34,6 +34,18 @@ final class ModuleRegistry {
     return _rootModules.values.expand((m) => m.routes).toList();
   }
 
+  Map<String, List<SettingsMenuRepresentable>> get settings {
+    final Map<String, List<SettingsMenuRepresentable>> result = {};
+
+    for (final module in _modules.values) {
+      if (module.settings.isNotEmpty) {
+        result[module.name] = module.settings;
+      }
+    }
+
+    return result;
+  }
+
   void register(Module module) {
     _modules.putIfAbsent(module.name, () => module);
   }
@@ -65,10 +77,10 @@ abstract class ModuleBase {
   Future<void> initialize(Ref ref) async {}
 }
 
-abstract class SettingsMenuRepresentable<T extends RouteBase> {
+abstract class SettingsMenuRepresentable {
   IconData? get icon;
 
   String get title;
 
-  T get route;
+  String get route;
 }
