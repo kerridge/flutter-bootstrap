@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 abstract class TabData {
   const TabData();
 
-  int get index;
+  int get order;
 
   String get name;
 
@@ -13,6 +12,4 @@ abstract class TabData {
   IconData get icon;
 
   String get label;
-
-  StatefulShellBranch get branch;
 }

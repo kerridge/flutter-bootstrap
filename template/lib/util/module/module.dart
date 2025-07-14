@@ -1,30 +1,33 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:template/core/navigation/tabs/tabs.dart';
 
 final class ModuleRegistry {
-  ModuleRegistry({required this.ref});
+  ModuleRegistry(this.ref);
 
-  static final provider = Provider<ModuleRegistry>((ref) {
-    return ModuleRegistry(ref: ref);
-  });
+  static final provider = Provider<ModuleRegistry>(ModuleRegistry.new);
 
   final Ref ref;
 
   final Map<String, Module> _modules = {};
-  final Map<String, Module> _rootModules = {};
+  final Map<String, RootModule> _rootModules = {};
 
-  List<RouteBase> get routes {
-    final routes = _modules.values.expand((m) => m.routes).toList();
-    final settingsRoutes = _modules.values
-        .expand((m) => m.settings.map((s) => s.route))
-        .toList();
+  Map<AppTab, List<RouteBase>> get routes {
+    final routes = <AppTab, List<RouteBase>>{};
 
-    return [...routes, ...settingsRoutes];
+    for (final module in _modules.values) {
+      for (final routesEntry in module.routes.entries) {
+        final routesForTab = routesEntry.value;
+        final tab = routesEntry.key;
+
+        routes[tab] = [...routes[tab] ?? [], ...routesForTab];
+      }
+    }
+
+    return routes;
   }
 
   List<RouteBase> get rootRoutes {
@@ -35,12 +38,8 @@ final class ModuleRegistry {
     _modules.putIfAbsent(module.name, () => module);
   }
 
-  void registerRootModule(Module module) {
+  void registerRootModule(RootModule module) {
     _rootModules.putIfAbsent(module.name, () => module);
-  }
-
-  Module? get(String name) {
-    return _modules[name];
   }
 
   Future<void> initialize() async {
@@ -50,12 +49,18 @@ final class ModuleRegistry {
   }
 }
 
-abstract class Module {
-  String get name;
-
-  List<RouteBase> get routes => [];
+abstract class Module extends ModuleBase {
+  Map<AppTab, List<RouteBase>> get routes => {};
 
   List<SettingsMenuRepresentable> get settings => [];
+}
+
+abstract class RootModule extends ModuleBase {
+  List<RouteBase> get routes => [];
+}
+
+abstract class ModuleBase {
+  String get name;
 
   Future<void> initialize(Ref ref) async {}
 }

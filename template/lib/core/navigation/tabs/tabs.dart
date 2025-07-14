@@ -1,9 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:template/modules/home/home.api.dart';
-import 'package:template/modules/settings/lib/module/settings.routes.dart';
-import 'package:template/modules/todos/todos.api.dart';
 import 'package:template/util/navigation/navigation.api.dart';
 
 enum AppTab {
@@ -12,9 +8,15 @@ enum AppTab {
   settings;
 
   TabData get tab => switch (this) {
-    AppTab.home => HomeTab(),
-    AppTab.todos => TodosTab(),
-    AppTab.settings => SettingsTab(),
+    AppTab.home => Tabs.home,
+    AppTab.todos => Tabs.todos,
+    AppTab.settings => Tabs.settings,
+  };
+
+  GlobalKey<NavigatorState> get navigatorKey => switch (this) {
+    AppTab.home => HomeTab.navKey,
+    AppTab.todos => TodosTab.navKey,
+    AppTab.settings => SettingsTab.navKey,
   };
 }
 
@@ -28,24 +30,24 @@ abstract final class Tabs {
 
     final indices = <int>{};
     for (final tab in tabs) {
-      if (!indices.add(tab.index)) {
-        throw RangeError.value(tab.index, 'index', 'Duplicate tab index found');
+      if (!indices.add(tab.order)) {
+        throw RangeError.value(tab.order, 'index', 'Duplicate tab index found');
       }
     }
 
-    return tabs.sorted((a, b) => a.index.compareTo(b.index));
+    return tabs.sorted((a, b) => a.order.compareTo(b.order));
   }
 }
 
 final class HomeTab extends TabData {
   const HomeTab();
 
-  static final GlobalKey<NavigatorState> _navKey = GlobalKey<NavigatorState>(
+  static final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>(
     debugLabel: 'home',
   );
 
   @override
-  int get index => 0;
+  int get order => 0;
 
   @override
   String get name => 'Home';
@@ -58,23 +60,17 @@ final class HomeTab extends TabData {
 
   @override
   String get label => 'Home';
-
-  @override
-  StatefulShellBranch get branch => StatefulShellBranch(
-    routes: <RouteBase>[HomeRoutes.homeRoute],
-    navigatorKey: _navKey,
-  );
 }
 
 final class TodosTab extends TabData {
   const TodosTab();
 
-  static final GlobalKey<NavigatorState> _navKey = GlobalKey<NavigatorState>(
+  static final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>(
     debugLabel: 'todos',
   );
 
   @override
-  int get index => 1;
+  int get order => 1;
 
   @override
   String get name => 'Todos';
@@ -87,23 +83,17 @@ final class TodosTab extends TabData {
 
   @override
   String get label => 'Todos';
-
-  @override
-  StatefulShellBranch get branch => StatefulShellBranch(
-    routes: <RouteBase>[TodoRoutes.todosRoute],
-    navigatorKey: _navKey,
-  );
 }
 
 final class SettingsTab extends TabData {
   const SettingsTab();
 
-  static final GlobalKey<NavigatorState> _navKey = GlobalKey<NavigatorState>(
+  static final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>(
     debugLabel: 'settings',
   );
 
   @override
-  int get index => 2;
+  int get order => 2;
 
   @override
   String get name => 'Settings';
@@ -116,10 +106,4 @@ final class SettingsTab extends TabData {
 
   @override
   String get label => 'Settings';
-
-  @override
-  StatefulShellBranch get branch => StatefulShellBranch(
-    routes: <RouteBase>[SettingsRoutes.settingsRoute],
-    navigatorKey: _navKey,
-  );
 }

@@ -11,10 +11,7 @@ abstract final class AuthRoutes {
   static List<RouteBase> routes = $appRoutes;
 
   static LoginRoute get login => const LoginRoute();
-  static final RouteBase loginRoute = $loginRoute;
-
   static SignupRoute get signup => const SignupRoute();
-  static final RouteBase signupRoute = $signupRoute;
 }
 
 @TypedGoRoute<LoginRoute>(path: '/login', routes: [])

@@ -3,13 +3,10 @@ import 'package:template/util/module/module.dart';
 
 import 'auth.routes.dart';
 
-final class AuthModule extends Module {
+final class AuthModule extends RootModule {
   @override
   String get name => 'auth';
 
   @override
   List<RouteBase> get routes => AuthRoutes.routes;
-
-  @override
-  List<SettingsMenuRepresentable> get settings => [];
 }

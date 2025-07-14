@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:template/core/navigation/tabs/tabs.dart';
 import 'package:template/util/module/module.dart';
 
 import 'settings.routes.dart';
 
 final class SettingsModule extends Module {
+  static const GeneralSettingsItem _generalSettingsItem = GeneralSettingsItem();
+
   @override
   String get name => 'settings';
 
@@ -14,14 +17,16 @@ final class SettingsModule extends Module {
   Future<void> initialize(Ref ref) async {}
 
   @override
-  List<RouteBase> get routes => [];
+  Map<AppTab, List<RouteBase>> get routes => {
+    AppTab.settings: [_generalSettingsItem.route],
+  };
 
   @override
-  List<SettingsMenuRepresentable> get settings => [AppSettingsItem()];
+  List<SettingsMenuRepresentable> get settings => [_generalSettingsItem];
 }
 
-final class AppSettingsItem implements SettingsMenuRepresentable {
-  AppSettingsItem();
+final class GeneralSettingsItem implements SettingsMenuRepresentable {
+  const GeneralSettingsItem();
 
   @override
   IconData? get icon => Icons.settings;
@@ -30,5 +35,5 @@ final class AppSettingsItem implements SettingsMenuRepresentable {
   String get title => 'General';
 
   @override
-  RouteBase get route => SettingsRoutes.settingsRoute;
+  RouteBase get route => SettingsRoutes.generalSettingsRoute;
 }

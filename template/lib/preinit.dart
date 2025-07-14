@@ -2,6 +2,8 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:template/modules/auth/lib/module/auth.module.dart';
+import 'package:template/modules/home/lib/module/home.module.dart';
+import 'package:template/modules/todos/lib/module/todo.module.dart';
 import 'package:template/modules/settings/lib/module/settings.module.dart';
 import 'package:template/util/module/module.dart';
 
@@ -18,7 +20,10 @@ Future<ProviderContainer> preinit() async {
 
   moduleRegistry.registerRootModule(AuthModule());
 
-  moduleRegistry.register(SettingsModule());
+  moduleRegistry
+    ..register(SettingsModule())
+    ..register(HomeModule())
+    ..register(TodoModule());
 
   await moduleRegistry.initialize();
 

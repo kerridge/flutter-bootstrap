@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -23,24 +24,37 @@ final class AppRouter extends Notifier<GoRouter> {
   GoRouter _buildRouter() {
     final moduleRegistry = ref.read(ModuleRegistry.provider);
 
-    final routes = [...moduleRegistry.rootRoutes, _buildStatefulShell()];
+    final branches = moduleRegistry.routes.entries
+        .sortedBy((entry) => entry.key.tab.order)
+        .map((entry) {
+          return StatefulShellBranch(
+            routes: entry.value,
+            navigatorKey: entry.key.navigatorKey,
+          );
+        })
+        .toList();
+
+    final routes = [
+      ...moduleRegistry.rootRoutes,
+      _buildStatefulShell(branches),
+    ];
 
     return GoRouter(
       navigatorKey: rootNavKey,
       debugLogDiagnostics: true,
-      initialLocation: '/login',
+      initialLocation: '/',
       routes: routes,
     );
   }
 
-  StatefulShellRoute _buildStatefulShell() {
+  StatefulShellRoute _buildStatefulShell(List<StatefulShellBranch> branches) {
     final tabs = Tabs.all;
 
     return StatefulShellRoute.indexedStack(
       builder: (context, state, StatefulNavigationShell navigationShell) {
         return AppShell(shell: navigationShell, tabs: tabs);
       },
-      branches: tabs.map((tab) => tab.branch).toList(),
+      branches: branches,
     );
   }
 }
